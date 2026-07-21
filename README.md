@@ -69,10 +69,12 @@ Randomness may be injected into a game definition without making reducers nondet
 
 ```text
 PlayerDriven: RollDice -> DiceRolled(values)
-RuleDriven: resolve-roll -> DiceDistributed(...)
+RuleDriven: resolve-roll -> RollResolved(...)
 ```
 
 Tests can supply a fixed or seeded source. Replaying recorded events does not invoke that source again. The framework deliberately does not yet define a universal chance-driven transition cause; that concept should be added only when a game supplies domain evidence that randomness must progress independently of an initiating intent.
+
+A generated outcome may introduce another player decision. Pass the Pandas resolves non-panda faces automatically, then persists a pending panda count and pauses until the roller submits a `DistributePandas` intent. This is an authoritative state rather than a presentation frame because legal play cannot continue without that choice.
 
 ## Turn ownership and decisions
 
