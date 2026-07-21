@@ -63,6 +63,17 @@ val ruleReactions = state.history.transitions
     .filter { it.cause is TransitionCause.RuleDriven }
 ```
 
+## Random outcomes
+
+Randomness may be injected into a game definition without making reducers nondeterministic. For a player-initiated dice roll, the transition remains player-driven and its event records the realized values. Subsequent rule-driven steps consume those values:
+
+```text
+PlayerDriven: RollDice -> DiceRolled(values)
+RuleDriven: resolve-roll -> DiceDistributed(...)
+```
+
+Tests can supply a fixed or seeded source. Replaying recorded events does not invoke that source again. The framework deliberately does not yet define a universal chance-driven transition cause; that concept should be added only when a game supplies domain evidence that randomness must progress independently of an initiating intent.
+
 ## Turn ownership and decisions
 
 `TurnContext` separates two concepts that simple alternating games often conflate:
